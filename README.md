@@ -1,1 +1,0 @@
-# tejaspatel.github.io
