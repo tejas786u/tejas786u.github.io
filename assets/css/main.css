@@ -1643,7 +1643,7 @@
 				transform: translateY(7em);
 			}
 
-		@media screen and (max-width: 480px) {
+		/*@media screen and (max-width: 480px) {
 
 			.gallery {
 				-moz-flex-wrap: nowrap;
@@ -1660,7 +1660,7 @@
 					width: 100%;
 				}
 
-		}
+		}*/
 
 /* Header */
 
