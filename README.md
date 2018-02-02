@@ -1,1 +1,0 @@
-# Tejas Patel - Personal Website
