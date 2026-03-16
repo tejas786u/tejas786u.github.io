@@ -4,6 +4,14 @@ if(isset($_POST['email'])) {
 	
 	include 'freecontactformsettings.php';
 	
+	// Include PHPMailer
+	require 'lib/phpmailer/PHPMailer.php';
+	require 'lib/phpmailer/SMTP.php';
+	require 'lib/phpmailer/Exception.php';
+	
+	use PHPMailer\PHPMailer\PHPMailer;
+	use PHPMailer\PHPMailer\Exception;
+	
 	function died($error) {
 		echo "died called";
 		echo "Sorry, but there were error(s) found with the form you submitted. ";
@@ -37,27 +45,42 @@ if(isset($_POST['email'])) {
   if(strlen($error_message) > 0) {
   	died($error_message);
   }
-	$email_message = "Form details below.\r\n";
 	
-	function clean_string($string) {
-	  $bad = array("content-type","bcc:","to:","cc:");
-	  return str_replace($bad,"",$string);
+	// Create a new PHPMailer instance
+	$mail = new PHPMailer(true);
+	
+	try {
+		// Server settings
+		$mail->isSMTP();
+		$mail->Host = 'smtp.gmail.com';
+		$mail->SMTPAuth = true;
+		$mail->Username = 'tejas786u@gmail.com'; // Your Gmail address
+		$mail->Password = 'YOUR_GMAIL_APP_PASSWORD'; // Your Gmail app password (not regular password)
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+		$mail->Port = 587;
+		
+		// Recipients
+		$mail->setFrom('tejas786u@gmail.com', 'Tejas Website');
+		$mail->addAddress($email_to); // Add recipient
+		
+		// Content
+		$mail->isHTML(false);
+		$mail->Subject = $email_subject;
+		$mail->Body = "Form details below.\r\n\r\n" .
+					  "Full Name: " . clean_string($full_name) . "\r\n" .
+					  "Email: " . clean_string($email_from) . "\r\n" .
+					  "Message: " . clean_string($msg_form) . "\r\n";
+		
+		$mail->send();
+		header('Location: index.php?sent=1');
+	} catch (Exception $e) {
+		header('Location: index.php?error=1');
 	}
-	
-	$email_message .= "Full Name: ".clean_string($full_name)."\r\n";
-	$email_message .= "Email: ".clean_string($email_from)."\r\n";
-	$email_message .= "Message: ".clean_string($msg_form)."\r\n";
-	
-$headers = 'From: '.$email_from."\r\n".
-'Reply-To: '.$email_from."\r\n" .
-'X-Mailer: PHP/' . phpversion();
-//mail($email_to, $email_subject, $email_message);
-mail($email_to, $email_subject, $email_message, $headers);
-//header("Location: index.html");
-header('Location: index.html');
-?>
- <!-- <script>location.replace('<?php echo $thankyou;?>')</script> -->
-<?php
 }
 die();
+
+function clean_string($string) {
+  $bad = array("content-type","bcc:","to:","cc:");
+  return str_replace($bad,"",$string);
+}
 ?>

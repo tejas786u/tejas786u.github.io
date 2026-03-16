@@ -98,6 +98,7 @@
 					<header>
 						<h2>Say Hello.</h2>
 						<p>Feel free to contact me by filling following details. I'll Contact you as soon as possible.</p>
+						<?php if(isset($_GET['sent'])) { echo '<p style="color: green;">Thank you! Your message has been sent successfully.</p>'; } elseif(isset($_GET['error'])) { echo '<p style="color: red;">Sorry, there was an error sending your message. Please try again.</p>'; } ?>
 					</header>
 					<div class="box">
 						<form method="post" action="freecontactformprocess.php">
