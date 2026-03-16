@@ -23,6 +23,16 @@ if(isset($_POST['email'])) {
 	$msg_form = $_POST['message']; // required
 
 	$error_message = "";
+	
+	if (empty($full_name)) {
+		$error_message .= 'Name is required.<br />';
+	}
+	if (empty($email_from) || !filter_var($email_from, FILTER_VALIDATE_EMAIL)) {
+		$error_message .= 'A valid email is required.<br />';
+	}
+	if (empty($msg_form)) {
+		$error_message .= 'Message is required.<br />';
+	}
   
   if(strlen($error_message) > 0) {
   	died($error_message);
